@@ -1,0 +1,65 @@
+{
+  "name": "averaged-perceptron",
+  "version": "1.0.0-beta.0",
+  "description": "A linear classifier with the averaged perceptron algorithm",
+  "keywords": [
+    "artificial intelligence",
+    "average",
+    "classification",
+    "classify",
+    "linear",
+    "machine learning",
+    "model",
+    "perceptron"
+  ],
+  "homepage": "https://github.com/rtomrud/averaged-perceptron#readme",
+  "bugs": {
+    "url": "https://github.com/rtomrud/averaged-perceptron/issues"
+  },
+  "license": "MIT",
+  "author": "Artem Rudenko <rtomrud@gmail.com>",
+  "files": [
+    "index.js"
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rtomrud/averaged-perceptron.git"
+  },
+  "scripts": {
+    "lint": "eslint *.js",
+    "test": "nyc --silent tape -r esm index.test.js | faucet && nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100",
+    "posttest": "npm run lint"
+  },
+  "devDependencies": {
+    "array-shuffle": "^1.0.1",
+    "eslint": "^5.0.1",
+    "eslint-config-pretty-strict": "^1.0.0-rc.9",
+    "eslint-plugin-prettier": "^2.6.1",
+    "esm": "^3.0.55",
+    "faucet": "0.0.1",
+    "husky": "^1.0.0-rc.9",
+    "nyc": "^12.0.2",
+    "prettier": "1.13.6",
+    "tape": "^4.9.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/eslint-config-pretty-strict/index.js"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module"
+    },
+    "root": true
+  },
+  "esm": {
+    "cjs": true,
+    "mode": "auto"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test"
+    }
+  }
+}

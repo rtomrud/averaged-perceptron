@@ -431,7 +431,7 @@ test("averaged-perceptron update() with weights with all features", ({
   end();
 });
 
-test("averaged-perceptron serialize() with no weights", ({
+test("averaged-perceptron weights() with no weights", ({
   deepEqual,
   end
 }) => {
@@ -448,7 +448,7 @@ test("averaged-perceptron serialize() with no weights", ({
   end();
 });
 
-test("averaged-perceptron serialize() with initial weights", ({
+test("averaged-perceptron weights() with initial weights", ({
   deepEqual,
   end
 }) => {
@@ -471,7 +471,7 @@ test("averaged-perceptron serialize() with initial weights", ({
   end();
 });
 
-test("averaged-perceptron serialize() with correct predictions", ({
+test("averaged-perceptron weights() with correct predictions", ({
   deepEqual,
   end
 }) => {
@@ -505,7 +505,7 @@ test("averaged-perceptron serialize() with correct predictions", ({
   end();
 });
 
-test("averaged-perceptron serialize() with wrong predictions", ({
+test("averaged-perceptron weights() with wrong predictions", ({
   deepEqual,
   end
 }) => {
@@ -545,7 +545,7 @@ test("averaged-perceptron serialize() with wrong predictions", ({
   end();
 });
 
-test("averaged-perceptron serialize() with already trained weights", ({
+test("averaged-perceptron weights() with already trained weights", ({
   deepEqual,
   end
 }) => {

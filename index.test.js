@@ -431,10 +431,7 @@ test("averaged-perceptron update() with weights with all features", ({
   end();
 });
 
-test("averaged-perceptron weights() with no weights", ({
-  deepEqual,
-  end
-}) => {
+test("averaged-perceptron weights() with no weights", ({ deepEqual, end }) => {
   deepEqual(
     createPerceptron().weights(),
     {},

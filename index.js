@@ -10,7 +10,7 @@ export default function(weights = {}, iterations = 0) {
   }
 
   if (!Number.isSafeInteger(iterations) || iterations < 0) {
-    throw TypeError();
+    throw RangeError();
   }
 
   const weightsHistory = {};

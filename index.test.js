@@ -67,20 +67,20 @@ test("averaged-perceptron with an invalid second argument", ({
   throws,
   end
 }) => {
-  throws(() => averagedPerceptron({}, true), TypeError);
-  throws(() => averagedPerceptron({}, false), TypeError);
-  throws(() => averagedPerceptron({}, null), TypeError);
-  throws(() => averagedPerceptron({}, ""), TypeError);
-  throws(() => averagedPerceptron({}, () => {}), TypeError);
-  throws(() => averagedPerceptron({}, Infinity), TypeError);
-  throws(() => averagedPerceptron({}, -Infinity), TypeError);
-  throws(() => averagedPerceptron({}, Number.POSITIVE_INFINITY), TypeError);
-  throws(() => averagedPerceptron({}, Number.NEGATIVE_INFINITY), TypeError);
-  throws(() => averagedPerceptron({}, Number.MAX_VALUE), TypeError);
-  throws(() => averagedPerceptron({}, Number.MIN_VALUE), TypeError);
-  throws(() => averagedPerceptron({}, NaN), TypeError);
-  throws(() => averagedPerceptron({}, 1.5), TypeError);
-  throws(() => averagedPerceptron({}, -1), TypeError);
+  throws(() => averagedPerceptron({}, true), RangeError);
+  throws(() => averagedPerceptron({}, false), RangeError);
+  throws(() => averagedPerceptron({}, null), RangeError);
+  throws(() => averagedPerceptron({}, ""), RangeError);
+  throws(() => averagedPerceptron({}, () => {}), RangeError);
+  throws(() => averagedPerceptron({}, Infinity), RangeError);
+  throws(() => averagedPerceptron({}, -Infinity), RangeError);
+  throws(() => averagedPerceptron({}, Number.POSITIVE_INFINITY), RangeError);
+  throws(() => averagedPerceptron({}, Number.NEGATIVE_INFINITY), RangeError);
+  throws(() => averagedPerceptron({}, Number.MAX_VALUE), RangeError);
+  throws(() => averagedPerceptron({}, Number.MIN_VALUE), RangeError);
+  throws(() => averagedPerceptron({}, NaN), RangeError);
+  throws(() => averagedPerceptron({}, 1.5), RangeError);
+  throws(() => averagedPerceptron({}, -1), RangeError);
   end();
 });
 

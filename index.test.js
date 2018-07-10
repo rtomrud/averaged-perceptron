@@ -1,9 +1,12 @@
 import test from "./node_modules/tape/index.js";
-import createPerceptron from "./index.js";
+import averagedPerceptron from "./index.js";
 import shuffle from "./node_modules/array-shuffle/index.js";
 
-test("averaged-perceptron", ({ equal, end }) => {
-  const { predict, update } = createPerceptron();
+test("averaged-perceptron with update() and then predict()", ({
+  equal,
+  end
+}) => {
+  const { predict, update } = averagedPerceptron();
   const trainingData = [
     [{ height: 4, width: 2 }, "slim"],
     [{ height: 2, width: 4 }, "fat"],
@@ -47,61 +50,58 @@ test("averaged-perceptron", ({ equal, end }) => {
   end();
 });
 
-test("averaged-perceptron factory with an invalid first argument", ({
+test("averaged-perceptron with an invalid first argument", ({
   throws,
   end
 }) => {
-  throws(() => createPerceptron(true), TypeError);
-  throws(() => createPerceptron(false), TypeError);
-  throws(() => createPerceptron(null), TypeError);
-  throws(() => createPerceptron(0), TypeError);
-  throws(() => createPerceptron(""), TypeError);
-  throws(() => createPerceptron(() => {}), TypeError);
+  throws(() => averagedPerceptron(true), TypeError);
+  throws(() => averagedPerceptron(false), TypeError);
+  throws(() => averagedPerceptron(null), TypeError);
+  throws(() => averagedPerceptron(0), TypeError);
+  throws(() => averagedPerceptron(""), TypeError);
+  throws(() => averagedPerceptron(() => {}), TypeError);
   end();
 });
 
-test("averaged-perceptron factory with an invalid second argument", ({
+test("averaged-perceptron with an invalid second argument", ({
   throws,
   end
 }) => {
-  throws(() => createPerceptron({}, true), TypeError);
-  throws(() => createPerceptron({}, false), TypeError);
-  throws(() => createPerceptron({}, null), TypeError);
-  throws(() => createPerceptron({}, ""), TypeError);
-  throws(() => createPerceptron({}, () => {}), TypeError);
-  throws(() => createPerceptron({}, Infinity), TypeError);
-  throws(() => createPerceptron({}, -Infinity), TypeError);
-  throws(() => createPerceptron({}, Number.POSITIVE_INFINITY), TypeError);
-  throws(() => createPerceptron({}, Number.NEGATIVE_INFINITY), TypeError);
-  throws(() => createPerceptron({}, Number.MAX_VALUE), TypeError);
-  throws(() => createPerceptron({}, Number.MIN_VALUE), TypeError);
-  throws(() => createPerceptron({}, NaN), TypeError);
-  throws(() => createPerceptron({}, 1.5), TypeError);
-  throws(() => createPerceptron({}, -1), TypeError);
+  throws(() => averagedPerceptron({}, true), TypeError);
+  throws(() => averagedPerceptron({}, false), TypeError);
+  throws(() => averagedPerceptron({}, null), TypeError);
+  throws(() => averagedPerceptron({}, ""), TypeError);
+  throws(() => averagedPerceptron({}, () => {}), TypeError);
+  throws(() => averagedPerceptron({}, Infinity), TypeError);
+  throws(() => averagedPerceptron({}, -Infinity), TypeError);
+  throws(() => averagedPerceptron({}, Number.POSITIVE_INFINITY), TypeError);
+  throws(() => averagedPerceptron({}, Number.NEGATIVE_INFINITY), TypeError);
+  throws(() => averagedPerceptron({}, Number.MAX_VALUE), TypeError);
+  throws(() => averagedPerceptron({}, Number.MIN_VALUE), TypeError);
+  throws(() => averagedPerceptron({}, NaN), TypeError);
+  throws(() => averagedPerceptron({}, 1.5), TypeError);
+  throws(() => averagedPerceptron({}, -1), TypeError);
   end();
 });
 
-test("averaged-perceptron factory with correct arguments", ({
-  deepEqual,
-  end
-}) => {
+test("averaged-perceptron with correct arguments", ({ deepEqual, end }) => {
   deepEqual(
-    createPerceptron({ 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } }).weights(),
+    averagedPerceptron({ 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } }).weights(),
     { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } },
     "accepts objects"
   );
   deepEqual(
-    createPerceptron({ 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } }, 1).weights(),
+    averagedPerceptron({ 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } }, 1).weights(),
     { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } },
     "accepts objects as weights and iterations argument"
   );
   deepEqual(
-    createPerceptron([[1, 2], [3, 4]]).weights(),
+    averagedPerceptron([[1, 2], [3, 4]]).weights(),
     { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } },
     "accepts arrays"
   );
   deepEqual(
-    createPerceptron([[1, 2], [3, 4]]).weights(),
+    averagedPerceptron([[1, 2], [3, 4]]).weights(),
     { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } },
     "accepts arrays and iterations argument"
   );
@@ -112,9 +112,9 @@ test("averaged-perceptron predict() with no arguments and no weigths", ({
   deepEqual,
   end
 }) => {
-  deepEqual(createPerceptron().predict(), null, "returns null given nothing");
+  deepEqual(averagedPerceptron().predict(), null, "returns null given nothing");
   deepEqual(
-    createPerceptron().predict({}),
+    averagedPerceptron().predict({}),
     null,
     "returns null given an empty object"
   );
@@ -126,7 +126,7 @@ test("averaged-perceptron predict() with no arguments and with weigths", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).predict(),
@@ -134,7 +134,7 @@ test("averaged-perceptron predict() with no arguments and with weigths", ({
     "returns null given nothing and non-empty weights"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).predict({}),
@@ -146,12 +146,12 @@ test("averaged-perceptron predict() with no arguments and with weigths", ({
 
 test("averaged-perceptron predict() with no weights", ({ deepEqual, end }) => {
   deepEqual(
-    createPerceptron().predict({ x: 1 }),
+    averagedPerceptron().predict({ x: 1 }),
     null,
     "returns null given one feature and empty weights"
   );
   deepEqual(
-    createPerceptron().predict({ x: 1, y: 1 }),
+    averagedPerceptron().predict({ x: 1, y: 1 }),
     null,
     "returns null given many features and empty weights"
   );
@@ -160,7 +160,7 @@ test("averaged-perceptron predict() with no weights", ({ deepEqual, end }) => {
 
 test("averaged-perceptron predict() with one feature", ({ deepEqual, end }) => {
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).predict({ x: 1 }),
@@ -168,7 +168,7 @@ test("averaged-perceptron predict() with one feature", ({ deepEqual, end }) => {
     "returns label with the highest score given a feature with positive value"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).predict({ x: -1 }),
@@ -183,7 +183,7 @@ test("averaged-perceptron predict() with many features", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).predict({ x: 1, y: 0 }),
@@ -191,7 +191,7 @@ test("averaged-perceptron predict() with many features", ({
     "returns label with the highest score given a feature with a value of 0"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).predict({ x: 1, y: 1 }),
@@ -199,7 +199,7 @@ test("averaged-perceptron predict() with many features", ({
     "returns label with the highest score given features with equal values"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).predict({ x: 1, y: 0.2 }),
@@ -214,12 +214,12 @@ test("averaged-perceptron scores() with no arguments and no weigths", ({
   end
 }) => {
   deepEqual(
-    createPerceptron().scores(),
+    averagedPerceptron().scores(),
     {},
     "returns empty scores given nothing"
   );
   deepEqual(
-    createPerceptron().scores({}),
+    averagedPerceptron().scores({}),
     {},
     "returns empty scores given an empty object"
   );
@@ -231,7 +231,7 @@ test("averaged-perceptron scores() with no arguments and with weigths", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).scores(),
@@ -239,7 +239,7 @@ test("averaged-perceptron scores() with no arguments and with weigths", ({
     "returns empty scores given nothing and non-empty weights"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).scores({}),
@@ -251,12 +251,12 @@ test("averaged-perceptron scores() with no arguments and with weigths", ({
 
 test("averaged-perceptron scores() with no weights", ({ deepEqual, end }) => {
   deepEqual(
-    createPerceptron().scores({ x: 1 }),
+    averagedPerceptron().scores({ x: 1 }),
     {},
     "returns empty scores given one feature and empty weights"
   );
   deepEqual(
-    createPerceptron().scores({ x: 1, y: 1 }),
+    averagedPerceptron().scores({ x: 1, y: 1 }),
     {},
     "returns empty scores given many features and empty weights"
   );
@@ -265,7 +265,7 @@ test("averaged-perceptron scores() with no weights", ({ deepEqual, end }) => {
 
 test("averaged-perceptron scores() with one feature", ({ deepEqual, end }) => {
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).scores({ x: 1 }),
@@ -273,7 +273,7 @@ test("averaged-perceptron scores() with one feature", ({ deepEqual, end }) => {
     "returns positive scores given a feature with positive value"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).scores({ x: -1 }),
@@ -288,7 +288,7 @@ test("averaged-perceptron scores() with many features", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).scores({ x: 1, y: 0 }),
@@ -296,7 +296,7 @@ test("averaged-perceptron scores() with many features", ({
     "returns scores given a feature with a value of 0"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).scores({ x: 1, y: 1 }),
@@ -304,7 +304,7 @@ test("averaged-perceptron scores() with many features", ({
     "returns scores given features with equal values"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).scores({ x: 1, y: 0.2 }),
@@ -319,14 +319,14 @@ test("averaged-perceptron update() with no arguments and no weights", ({
   end
 }) => {
   deepEqual(
-    createPerceptron()
+    averagedPerceptron()
       .update()
       .weights(),
     {},
     "returns empty weights given nothing"
   );
   deepEqual(
-    createPerceptron()
+    averagedPerceptron()
       .update({})
       .weights(),
     {},
@@ -340,14 +340,14 @@ test("averaged-perceptron update() with no arguments and with weights", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
+    averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
       .update()
       .weights(),
     { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } },
     "returns the same weights given nothing"
   );
   deepEqual(
-    createPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
+    averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
       .update({})
       .weights(),
     { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } },
@@ -361,14 +361,14 @@ test("averaged-perceptron update() with weights without classes", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({ x: {}, y: {} })
+    averagedPerceptron({ x: {}, y: {} })
       .update({ x: 1, y: 1 }, "a")
       .weights(),
     { x: { a: 1 }, y: { a: 1 } },
     "returns all classes given a wrong prediction"
   );
   deepEqual(
-    createPerceptron({ x: {}, y: {} })
+    averagedPerceptron({ x: {}, y: {} })
       .update({ x: 1, y: 1 }, null)
       .weights(),
     { x: {}, y: {} },
@@ -382,14 +382,14 @@ test("averaged-perceptron update() with weights with some features", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({ x: { a: 0.4, b: 0.6 } })
+    averagedPerceptron({ x: { a: 0.4, b: 0.6 } })
       .update({ x: 1, y: 1 }, "a")
       .weights(),
     { x: { a: 0.4 + 1, b: 0.6 - 1 }, y: { a: 1, b: -1 } },
     "returns all features given a wrong prediction"
   );
   deepEqual(
-    createPerceptron({ x: { a: 0.4, b: 0.6 } })
+    averagedPerceptron({ x: { a: 0.4, b: 0.6 } })
       .update({ x: 1, y: 1 }, "b")
       .weights(),
     { x: { a: 0.4, b: 0.6 } },
@@ -403,7 +403,7 @@ test("averaged-perceptron update() with weights with all features", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     })
@@ -416,7 +416,7 @@ test("averaged-perceptron update() with weights with all features", ({
     "returns all features given a wrong prediction and all features"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     })
@@ -433,12 +433,12 @@ test("averaged-perceptron update() with weights with all features", ({
 
 test("averaged-perceptron weights() with no weights", ({ deepEqual, end }) => {
   deepEqual(
-    createPerceptron().weights(),
+    averagedPerceptron().weights(),
     {},
     "returns same weights given nothing"
   );
   deepEqual(
-    createPerceptron({}).weights(),
+    averagedPerceptron({}).weights(),
     {},
     "returns same weights given an empty object"
   );
@@ -450,12 +450,12 @@ test("averaged-perceptron weights() with initial weights", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({}).weights(),
+    averagedPerceptron({}).weights(),
     {},
     "returns empty weights given empty weights"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).weights(),
@@ -473,7 +473,7 @@ test("averaged-perceptron weights() with correct predictions", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     })
@@ -486,7 +486,7 @@ test("averaged-perceptron weights() with correct predictions", ({
     "returns same weights given a correct prediction"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     })
@@ -507,7 +507,7 @@ test("averaged-perceptron weights() with wrong predictions", ({
   end
 }) => {
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     })
@@ -520,7 +520,7 @@ test("averaged-perceptron weights() with wrong predictions", ({
     "returns averages ignoring the initial weights given one wrong prediction"
   );
   deepEqual(
-    createPerceptron({
+    averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     })
@@ -547,7 +547,7 @@ test("averaged-perceptron weights() with already trained weights", ({
   end
 }) => {
   deepEqual(
-    createPerceptron(
+    averagedPerceptron(
       {
         x: { a: 0.4, b: 0.6 },
         y: { a: 0.8, b: -0.4 }
@@ -563,7 +563,7 @@ test("averaged-perceptron weights() with already trained weights", ({
     "returns averages given one wrong prediction and already trained weights"
   );
   deepEqual(
-    createPerceptron(
+    averagedPerceptron(
       {
         x: { a: 0.4, b: 0.6 },
         y: { a: 0.8, b: -0.4 }

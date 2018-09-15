@@ -24,7 +24,8 @@ export default function(weights = {}, iterations = 0) {
     predict(features = {}, scores = perceptron.scores(features)) {
       let bestScore = -Infinity;
       let prediction = null;
-      Object.entries(scores).forEach(([label, score]) => {
+      Object.keys(scores).forEach(label => {
+        const score = scores[label];
         if (score >= bestScore) {
           bestScore = score;
           prediction = label;
@@ -38,13 +39,15 @@ export default function(weights = {}, iterations = 0) {
      */
     scores(features = {}) {
       const scores = {};
-      Object.entries(features).forEach(([feature, value]) => {
+      Object.keys(features).forEach(feature => {
+        const value = features[feature];
         if (value === 0 || weights[feature] == null) {
           return scores;
         }
 
-        return Object.entries(weights[feature]).forEach(([label, weight]) => {
-          scores[label] = (scores[label] || 0) + weight * value;
+        return Object.keys(weights[feature]).forEach(label => {
+          scores[label] =
+            (scores[label] || 0) + weights[feature][label] * value;
         });
       });
       return scores;
@@ -61,7 +64,8 @@ export default function(weights = {}, iterations = 0) {
         return perceptron;
       }
 
-      Object.entries(features).forEach(([feature, value]) => {
+      Object.keys(features).forEach(feature => {
+        const value = features[feature];
         if (weights[feature] == null) {
           weights[feature] = {};
         }
@@ -102,11 +106,13 @@ export default function(weights = {}, iterations = 0) {
     weights() {
       const iterations = iteration || 1;
       const averagedWeights = {};
-      Object.entries(weights).forEach(([feature, classes]) => {
+      Object.keys(weights).forEach(feature => {
+        const classes = weights[feature];
         const classesHistory = weightsHistory[feature] || {};
         const averagedClasses = {};
         averagedWeights[feature] = averagedClasses;
-        Object.entries(classes).forEach(([label, weight]) => {
+        Object.keys(classes).forEach(label => {
+          const weight = classes[label];
           const [total = 0, timestamp = 0] = classesHistory[label] || [];
           const updatedTotal = total + weight * (iterations - timestamp);
           averagedClasses[label] = updatedTotal / iterations;

@@ -75,7 +75,7 @@ const perceptron = averagedPerceptron(weights, 1000);
 
 ### `predict(features, scores)`
 
-Returns the predicted label from the given `features`, or `null` if none exists. Can be given the `scores` used to predict.
+Returns the predicted label from the given `features`, or `null` if none exists. Can be given the `scores` so that it does not have to compute them.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";

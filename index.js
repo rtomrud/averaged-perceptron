@@ -19,7 +19,8 @@ export default function(weights = {}, iterations = 0) {
   const perceptron = {
     /**
      * Returns the predicted label from the given `features`, or `null` if none
-     * exists. Can be given the `scores` used to predict.
+     * exists. Can be given the `scores` so that it does not have to compute
+     * them.
      */
     predict(features = {}, scores = perceptron.scores(features)) {
       let bestScore = -Infinity;

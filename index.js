@@ -42,10 +42,10 @@ export default function(weights = {}, iterations = 0) {
       const scores = {};
       Object.keys(features).forEach(feature => {
         const value = features[feature];
-        if (value !== 0 && weights[feature] != null) {
-          Object.keys(weights[feature]).forEach(label => {
-            scores[label] =
-              (scores[label] || 0) + weights[feature][label] * value;
+        const classes = weights[feature];
+        if (value !== 0 && classes != null) {
+          Object.keys(classes).forEach(label => {
+            scores[label] = (scores[label] || 0) + classes[label] * value;
           });
         }
       });

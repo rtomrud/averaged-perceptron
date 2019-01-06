@@ -3,7 +3,6 @@
  * given `weights`, the number of iterations used to obtain them are the given
  * `iterations`, or `0` by default.
  */
-// eslint-disable-next-line max-lines-per-function
 export default function(weights = {}, iterations = 0) {
   if (typeof weights !== "object" || weights == null) {
     throw TypeError();

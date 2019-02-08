@@ -27,7 +27,7 @@
     "url": "https://github.com/rtomrud/averaged-perceptron.git"
   },
   "scripts": {
-    "lint": "eslint *.js",
+    "lint": "eslint '*.js'",
     "test": "nyc --silent tape -r esm index.test.js | faucet && nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
   },
   "devDependencies": {

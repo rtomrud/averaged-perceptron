@@ -5,7 +5,7 @@
 
 A linear classifier with the averaged [perceptron](https://en.wikipedia.org/wiki/Perceptron) algorithm
 
-- Optimized for sparse features, and allows not specifying the features before training
+- Optimized for very sparse features; weights are stored as an object instead of as an array
 - Can be [efficiently initialized](#averagedperceptronweights-iterations) from given weights, like those returned from [`weights()`](#weights)
 - Get the label with the best score with [`predict()`](#predictfeatures-scores), or all the scores with [`scores()`](#scoresfeatures)
 - Efficient [`update()`](#updatefeatures-label-guess) that does not have to check and update all the weights every call

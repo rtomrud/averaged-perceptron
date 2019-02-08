@@ -1,6 +1,6 @@
 {
   "name": "averaged-perceptron",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "description": "A linear classifier with the averaged perceptron algorithm",
   "keywords": [
     "artificial intelligence",

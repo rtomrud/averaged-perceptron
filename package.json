@@ -28,7 +28,7 @@
   },
   "scripts": {
     "lint": "eslint '*.js'",
-    "test": "nyc --silent tape -r esm index.test.js | faucet && nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
+    "test": "nyc --reporter html tape -r esm index.test.js | faucet && nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
   },
   "devDependencies": {
     "array-shuffle": "^1.0.1",

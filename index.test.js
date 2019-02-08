@@ -112,11 +112,11 @@ test("averaged-perceptron predict() with no arguments and no weigths", ({
   deepEqual,
   end
 }) => {
-  deepEqual(averagedPerceptron().predict(), null, "returns null given nothing");
+  deepEqual(averagedPerceptron().predict(), "", 'returns "" given nothing');
   deepEqual(
     averagedPerceptron().predict({}),
-    null,
-    "returns null given an empty object"
+    "",
+    'returns "" given an empty object'
   );
   end();
 });
@@ -130,16 +130,16 @@ test("averaged-perceptron predict() with no arguments and with weigths", ({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).predict(),
-    null,
-    "returns null given nothing and non-empty weights"
+    "",
+    'returns "" given nothing and non-empty weights'
   );
   deepEqual(
     averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 }
     }).predict({}),
-    null,
-    "returns null given an empty object and non-empty weights"
+    "",
+    'returns "" given an empty object and non-empty weights'
   );
   end();
 });
@@ -147,13 +147,13 @@ test("averaged-perceptron predict() with no arguments and with weigths", ({
 test("averaged-perceptron predict() with no weights", ({ deepEqual, end }) => {
   deepEqual(
     averagedPerceptron().predict({ x: 1 }),
-    null,
-    "returns null given one feature and empty weights"
+    "",
+    'returns "" given one feature and empty weights'
   );
   deepEqual(
     averagedPerceptron().predict({ x: 1, y: 1 }),
-    null,
-    "returns null given many features and empty weights"
+    "",
+    'returns "" given many features and empty weights'
   );
   end();
 });
@@ -369,7 +369,7 @@ test("averaged-perceptron update() with weights without classes", ({
   );
   deepEqual(
     averagedPerceptron({ x: {}, y: {} })
-      .update({ x: 1, y: 1 }, null)
+      .update({ x: 1, y: 1 }, "")
       .weights(),
     { x: {}, y: {} },
     "returns empty features given a correct prediction"

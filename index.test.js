@@ -7,7 +7,7 @@ test("averaged-perceptron with update() and then predict()", ({
   end
 }) => {
   const { predict, update } = averagedPerceptron();
-  const trainingData = [
+  const examples = [
     [{ height: 4, width: 2 }, "slim"],
     [{ height: 2, width: 4 }, "fat"],
     [{ height: 1, width: 4 }, "fat"],
@@ -22,8 +22,8 @@ test("averaged-perceptron with update() and then predict()", ({
   const maxIterations = 1000;
   let iteration = 0;
   while (iteration < maxIterations) {
-    const shuffledData = shuffle(trainingData);
-    shuffledData.forEach(([features, actual]) => update(features, actual));
+    const shuffled = shuffle(examples);
+    shuffled.forEach(([features, actual]) => update(features, actual));
     iteration += 1;
   }
 

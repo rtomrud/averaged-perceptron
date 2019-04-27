@@ -24,7 +24,7 @@ npm install averaged-perceptron
 import averagedPerceptron from "averaged-perceptron";
 
 const { predict, update } = averagedPerceptron();
-const trainingData = [
+const examples = [
   [{ height: 4, width: 2 }, "slim"],
   [{ height: 2, width: 4 }, "fat"],
   [{ height: 1, width: 4 }, "fat"],
@@ -39,8 +39,8 @@ const trainingData = [
 const maxIterations = 1000;
 let iteration = 0;
 while (iteration < maxIterations) {
-  const shuffledData = shuffle(trainingData); // A Fisher–Yates array shuffle
-  shuffledData.forEach(([features, actual]) => update(features, actual));
+  const shuffled = shuffle(examples); // A Fisher–Yates shuffle
+  shuffled.forEach(([features, actual]) => update(features, actual));
   iteration += 1;
 }
 
@@ -69,9 +69,9 @@ If you want to train the model in multiple sessions, optionally persisting the w
 import averagedPerceptron from "averaged-perceptron";
 
 // Create a perceptron from already existing weights
-const serializedWeights = '{"x":{"a":0.4,"b":0.6},"y":{"a":0.8,"b":-0.4}}';
-const weights = JSON.parse(serializedWeights);
-const iterations = 1000; // Our weights were obtained after 1000 update() calls
+const weightsJSON = '{"x":{"a":0.4,"b":0.6},"y":{"a":0.8,"b":-0.4}}';
+const weights = JSON.parse(weightsJSON);
+const iterations = 1000; // Weights obtained with 1000 update() calls
 const perceptron = averagedPerceptron(weights, 1000);
 ```
 

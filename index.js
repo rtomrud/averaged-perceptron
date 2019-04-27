@@ -1,3 +1,5 @@
+const { hasOwnProperty } = Object;
+
 /**
  * Returns a perceptron object. Can be initialized from the given `weights`. If
  * given `weights`, the number of iterations used to obtain them are the given
@@ -63,15 +65,15 @@ export default function(weights = {}, iterations = 0) {
       }
 
       Object.keys(features).forEach(feature => {
-        const value = features[feature];
-        if (weights[feature] == null) {
+        if (!hasOwnProperty.call(weights, feature)) {
           weights[feature] = {};
         }
 
-        if (weightsHistory[feature] == null) {
+        if (!hasOwnProperty.call(weightsHistory, feature)) {
           weightsHistory[feature] = {};
         }
 
+        const value = features[feature];
         const classes = weights[feature];
         const classesHistory = weightsHistory[feature];
         const { [label]: labelWeight = 0, [guess]: guessWeight = 0 } = classes;

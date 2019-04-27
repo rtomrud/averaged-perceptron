@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/averaged-perceptron.svg?style=flat-square)](https://www.npmjs.com/package/averaged-perceptron)
 [![Build Status](https://travis-ci.com/rtomrud/averaged-perceptron.svg?branch=master)](https://travis-ci.com/rtomrud/averaged-perceptron)
+[![Coverage Status](https://coveralls.io/repos/github/rtomrud/averaged-perceptron/badge.svg?branch=master)](https://coveralls.io/github/rtomrud/averaged-perceptron?branch=master)
 
 A linear classifier with the averaged [perceptron](https://en.wikipedia.org/wiki/Perceptron) algorithm
 

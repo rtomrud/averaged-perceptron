@@ -28,7 +28,7 @@ export default function(weights = {}, iterations = 0) {
       let prediction = "";
       Object.keys(scores).forEach(label => {
         const score = scores[label];
-        if (score >= bestScore) {
+        if (score > bestScore) {
           bestScore = score;
           prediction = label;
         }
@@ -42,8 +42,8 @@ export default function(weights = {}, iterations = 0) {
     scores(features = {}) {
       const scores = {};
       Object.keys(features).forEach(feature => {
-        const value = features[feature];
         const classes = weights[feature];
+        const value = features[feature];
         if (classes && value !== 0) {
           Object.keys(classes).forEach(label => {
             scores[label] = (scores[label] || 0) + classes[label] * value;

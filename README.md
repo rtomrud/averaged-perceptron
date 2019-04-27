@@ -7,10 +7,10 @@
 
 A linear classifier with the averaged [perceptron](https://en.wikipedia.org/wiki/Perceptron) algorithm
 
-- Optimized for very sparse features; weights are stored as an object instead of as an array
-- Can be [efficiently initialized](#averagedperceptronweights-iterations) from given weights, like those returned from [`weights()`](#weights)
+- Optimized for very sparse features; weights are stored as an object (dictionary) instead of as an array (vector)
+- It can be [efficiently initialized](#averagedperceptronweights-iterations) from given weights, e.g., previously trained weights returned by [`weights()`](#weights)
 - Get the label with the best score with [`predict()`](#predictfeatures-scores), or all the scores with [`scores()`](#scoresfeatures)
-- Efficient [`update()`](#updatefeatures-label-guess) that does not have to check and update all the weights every call
+- Efficient [`update()`](#updatefeatures-label-guess) that adds new features and labels as you go; no need to initialize all features beforehand
 
 ## Installing
 
@@ -39,7 +39,7 @@ const trainingData = [
 const maxIterations = 1000;
 let iteration = 0;
 while (iteration < maxIterations) {
-  const shuffledData = shuffle(trainingData); // Any Fisher–Yates array shuffle
+  const shuffledData = shuffle(trainingData); // A Fisher–Yates array shuffle
   shuffledData.forEach(([features, actual]) => update(features, actual));
   iteration += 1;
 }
@@ -54,7 +54,7 @@ predict({ height: 2, width: 8 }); // => "fat"
 
 ### `averagedPerceptron(weights, iterations)`
 
-Returns a perceptron object. Can be initialized from the given `weights`. If given `weights`, the number of iterations used to obtain them are the given `iterations`, or `0` by default.
+Returns a perceptron object. It can be initialized from the given `weights`. When given `weights`, the number of iterations used to obtain them are the given `iterations`, or `0` by default.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -71,13 +71,13 @@ import averagedPerceptron from "averaged-perceptron";
 // Create a perceptron from already existing weights
 const serializedWeights = '{"x":{"a":0.4,"b":0.6},"y":{"a":0.8,"b":-0.4}}';
 const weights = JSON.parse(serializedWeights);
-const iterations = 1000;
+const iterations = 1000; // Our weights were obtained after 1000 update() calls
 const perceptron = averagedPerceptron(weights, 1000);
 ```
 
 ### `predict(features, scores)`
 
-Returns the predicted label from the given `features`, or `""` if none exists. Can be given the `scores` so that it does not have to compute them.
+Returns the label predicted from the given `features`, or `""` if none exists. It can be given the `scores` so that it does not have to recompute them.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -107,7 +107,7 @@ averagedPerceptron({
 
 ### `update(features, label, guess)`
 
-Returns the perceptron, updating the weights with the respective value of each of the given `features` if the given `label` is not predicted. Can be given the `guess` so that it does not have to compute it.
+Returns the perceptron, updating the weights with the respective value of each of the given `features` if the given `label` is not predicted. It can be given the `guess` so that it does not have to recompute it.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";

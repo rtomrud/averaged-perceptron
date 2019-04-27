@@ -19,9 +19,9 @@ export default function(weights = {}, iterations = 0) {
 
   const perceptron = {
     /**
-     * Returns the predicted label from the given `features`, or `""` if none
-     * exists. Can be given the `scores` so that it does not have to compute
-     * them.
+     * Returns the label predicted from the given `features`, or `""` if none
+     * exists. It can be given the `scores` so that it does not have to
+     * recompute them.
      */
     predict(features = {}, scores = perceptron.scores(features)) {
       let bestScore = -Infinity;
@@ -55,8 +55,8 @@ export default function(weights = {}, iterations = 0) {
 
     /**
      * Returns the perceptron, updating the weights with the respective value of
-     * each of the given `features` if the given `label` is not predicted.
-     * Can be given the `guess` so that it does not have to compute it.
+     * each of the given `features` if the given `label` is not predicted. It
+     * can be given the `guess` so that it does not have to recompute it.
      */
     update(features = {}, label = "", guess = perceptron.predict(features)) {
       if (label === guess) {

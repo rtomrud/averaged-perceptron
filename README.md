@@ -86,8 +86,7 @@ averagedPerceptron({
   x: { a: 0.4, b: 0.6 },
   y: { a: 0.8, b: -0.4 }
 }).predict({ x: 1, y: 1 });
-// =>
-"a"
+// => "a"
 ```
 
 ### `scores(features)`
@@ -101,8 +100,7 @@ averagedPerceptron({
   x: { a: 0.4, b: 0.6 },
   y: { a: 0.8, b: -0.4 }
 }).scores({ a: 1, b: 1 });
-// =>
-{ a: 1.2, b: 0.2 }
+// => { a: 1.2, b: 0.2 }
 ```
 
 ### `update(features, label, guess)`
@@ -126,8 +124,7 @@ averagedPerceptron({
   x: { a: 0.4, b: 0.6 },
   y: { a: 0.8, b: -0.4 }
 }).weights();
-// =>
-{ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } }
+// => { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } }
 ```
 
 ## License

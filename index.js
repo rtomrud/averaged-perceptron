@@ -44,7 +44,7 @@ export default function(weights = {}, iterations = 0) {
       Object.keys(features).forEach(feature => {
         const value = features[feature];
         const classes = weights[feature];
-        if (value !== 0 && classes != null) {
+        if (classes && value !== 0) {
           Object.keys(classes).forEach(label => {
             scores[label] = (scores[label] || 0) + classes[label] * value;
           });

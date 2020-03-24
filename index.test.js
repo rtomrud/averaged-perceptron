@@ -196,11 +196,8 @@ test("averaged-perceptron with an invalid second argument", ({
   throws(() => averagedPerceptron({}, ""), RangeError);
   throws(() => averagedPerceptron({}, () => {}), RangeError);
   throws(() => averagedPerceptron({}, Infinity), RangeError);
-  throws(() => averagedPerceptron({}, -Infinity), RangeError);
   throws(() => averagedPerceptron({}, Number.POSITIVE_INFINITY), RangeError);
-  throws(() => averagedPerceptron({}, Number.NEGATIVE_INFINITY), RangeError);
   throws(() => averagedPerceptron({}, Number.MAX_VALUE), RangeError);
-  throws(() => averagedPerceptron({}, Number.MIN_VALUE), RangeError);
   throws(() => averagedPerceptron({}, NaN), RangeError);
   throws(() => averagedPerceptron({}, 1.5), RangeError);
   throws(() => averagedPerceptron({}, -1), RangeError);

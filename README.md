@@ -20,11 +20,13 @@ npm install averaged-perceptron
 
 ## Using
 
+A simple (and unrealistic) example:
+
 ```js
 import averagedPerceptron from "averaged-perceptron";
 
 const { predict, update } = averagedPerceptron();
-const examples = [
+const trainingDataset = [
   [{ height: 4, width: 2 }, "slim"],
   [{ height: 2, width: 4 }, "fat"],
   [{ height: 1, width: 4 }, "fat"],
@@ -36,12 +38,10 @@ const examples = [
   [{ height: 1.1, width: 1 }, "slim"],
   [{ height: 4, width: 1 }, "slim"]
 ];
-const maxIterations = 1000;
-let iteration = 0;
-while (iteration < maxIterations) {
-  const shuffled = shuffle(examples); // A Fisher–Yates shuffle
-  shuffled.forEach(([features, actual]) => update(features, actual));
-  iteration += 1;
+const epochs = 1000;
+for (let epoch = 0; epoch < epochs; epoch += 1) {
+  const shuffledDataset = shuffle(trainingDataset); // Any Fisher–Yates shuffle
+  shuffledDataset.forEach(([features, label]) => update(features, label));
 }
 
 predict({ height: 8, width: 2 }); // => "slim"
@@ -49,6 +49,8 @@ predict({ height: 2.1, width: 2 }); // => "slim"
 predict({ height: 2, width: 2.1 }); // => "fat"
 predict({ height: 2, width: 8 }); // => "fat"
 ```
+
+A slightly more realistic example using the [Iris dataset](https://en.wikipedia.org/wiki/Iris_flower_data_set) can be found in [the tests](./index.test.js).
 
 ## API
 

@@ -96,12 +96,18 @@ test("averaged-perceptron with correct arguments", ({ deepEqual, end }) => {
     "accepts objects as weights and iterations argument"
   );
   deepEqual(
-    averagedPerceptron([[1, 2], [3, 4]]).weights(),
+    averagedPerceptron([
+      [1, 2],
+      [3, 4]
+    ]).weights(),
     { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } },
     "accepts arrays"
   );
   deepEqual(
-    averagedPerceptron([[1, 2], [3, 4]]).weights(),
+    averagedPerceptron([
+      [1, 2],
+      [3, 4]
+    ]).weights(),
     { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } },
     "accepts arrays and iterations argument"
   );

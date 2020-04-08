@@ -1,14 +1,14 @@
-const makeWeightWrapper = weights => ({
-  get: label => weights[label]
-});
-
 /**
  * Returns a perceptron object. Can be initialized from the given `weights`. If
  * given `weights`, the number of iterations used to obtain them are the given
  * `iterations`, or `0` by default.
  */
 // eslint-disable-next-line max-lines-per-function
-export default function(weights = makeWeightWrapper(), iterations = 0) {
+export default function(weights = {}, iterations = 0) {
+  if (typeof weights !== "object" || weights == null) {
+    throw TypeError();
+  }
+
   if (!Number.isSafeInteger(iterations) || iterations < 0) {
     throw RangeError();
   }
@@ -16,57 +16,52 @@ export default function(weights = makeWeightWrapper(), iterations = 0) {
   const weightsHistory = {};
   let iteration = iterations;
 
-  const predictFromScores = scores => {
-    let bestScore = -Infinity;
-    let prediction = null;
-    Object.keys(scores).forEach(label => {
-      const score = scores[label];
-      if (score >= bestScore) {
-        bestScore = score;
-        prediction = label;
-      }
-    });
-    return prediction;
-  };
-
-  const scoreFeature = features => (scoresPromise, feature) =>
-    scoresPromise.then(scores => {
-      const value = features[feature];
-      return weights.get(feature).then(classes => {
-        if (value === 0 || classes == null) {
-          return scores;
-        }
-
-        Object.keys(classes).forEach(label => {
-          scores[label] = (scores[label] || 0) + classes[label] * value;
-        });
-        return scores;
-      });
-    });
-
   const perceptron = {
     /**
      * Returns the predicted label from the given `features`, or `null` if none
      * exists. Can be given the `scores` used to predict.
      */
-    predict(features = {}, scores) {
-      if (scores == null) {
-        return perceptron
-          .scores(features)
-          .then(scores => predictFromScores(scores));
-      }
-
-      return Promise.resolve(predictFromScores(scores));
+    predict(features = {}, scores = perceptron.scores(features)) {
+      let bestScore = -Infinity;
+      let prediction = null;
+      Object.entries(scores).forEach(([label, score]) => {
+        if (score >= bestScore) {
+          bestScore = score;
+          prediction = label;
+        }
+      });
+      return prediction;
     },
 
     /**
      * Returns an object with the scores of each label in the given `features`.
      */
     scores(features = {}) {
-      return Object.keys(features).reduce(
-        scoreFeature(features),
-        Promise.resolve({})
-      );
+      const scores = {};
+      Object.entries(features).forEach(([feature, value]) => {
+        if (value === 0 || weights[feature] == null) {
+          return scores;
+        }
+
+        return Object.entries(weights[feature]).forEach(([label, weight]) => {
+          scores[label] = (scores[label] || 0) + weight * value;
+        });
+      });
+      return scores;
+    },
+
+    /**
+     * Returns an object with the score for the given `label` and `features`.
+     */
+    score(features = {}, label = "") {
+      return Object.entries(features).reduce((score, [feature, value]) => {
+        if (value === 0 || weights[feature] == null) {
+          return score;
+        }
+
+        const weight = weights[feature][label];
+        return score + weight * value;
+      }, 0);
     },
 
     /**
@@ -80,8 +75,7 @@ export default function(weights = makeWeightWrapper(), iterations = 0) {
         return perceptron;
       }
 
-      Object.keys(features).forEach(feature => {
-        const value = features[feature];
+      Object.entries(features).forEach(([feature, value]) => {
         if (weights[feature] == null) {
           weights[feature] = {};
         }
@@ -122,13 +116,11 @@ export default function(weights = makeWeightWrapper(), iterations = 0) {
     weights() {
       const iterations = iteration || 1;
       const averagedWeights = {};
-      Object.keys(weights).forEach(feature => {
-        const classes = weights[feature];
+      Object.entries(weights).forEach(([feature, classes]) => {
         const classesHistory = weightsHistory[feature] || {};
         const averagedClasses = {};
         averagedWeights[feature] = averagedClasses;
-        Object.keys(classes).forEach(label => {
-          const weight = classes[label];
+        Object.entries(classes).forEach(([label, weight]) => {
           const [total = 0, timestamp = 0] = classesHistory[label] || [];
           const updatedTotal = total + weight * (iterations - timestamp);
           averagedClasses[label] = updatedTotal / iterations;

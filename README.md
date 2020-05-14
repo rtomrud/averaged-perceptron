@@ -6,11 +6,6 @@
 
 A linear classifier with the averaged [perceptron](https://en.wikipedia.org/wiki/Perceptron) algorithm
 
-- Optimized for very sparse features; weights are stored as an object (dictionary) instead of as an array (vector)
-- It can be [efficiently initialized](#averagedperceptronweights-iterations) from given weights, e.g., previously trained weights returned by [`weights()`](#weights)
-- Get the label with the best score with [`predict()`](#predictfeatures-scores), or all the scores with [`scores()`](#scoresfeatures)
-- Efficient [`update()`](#updatefeatures-label-guess) that adds new features and labels as you go; no need to initialize all features beforehand
-
 ## Installing
 
 ```bash
@@ -55,7 +50,7 @@ A slightly more realistic example using the [Iris dataset](https://en.wikipedia.
 
 ### `averagedPerceptron(weights, iterations)`
 
-Returns a perceptron object. It can be initialized from the given `weights`. When given `weights`, the number of iterations used to obtain them are the given `iterations`, or `0` by default.
+Returns a perceptron object. It may be initialized from the given `weights`. When given `weights`, the number of iterations used to obtain them are the given `iterations`, or `0` by default.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -64,7 +59,7 @@ import averagedPerceptron from "averaged-perceptron";
 const perceptron = averagedPerceptron();
 ```
 
-If you want to train the model in multiple sessions, optionally persisting the weights between them, you can resume training by giving the number of iterations, that is, the number of times `update()` was called to obtain the given weights.
+If you want to train the model in multiple sessions, optionally persisting the weights between them, you may resume training by giving the number of iterations, that is, the number of times `update()` was called to obtain the given `weights`.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -78,7 +73,7 @@ const perceptron = averagedPerceptron(weights, 1000);
 
 ### `predict(features, scores)`
 
-Returns the label predicted from the given `features`, or `""` if none exists. It can be given the `scores` so that it does not have to recompute them.
+Returns the label predicted from the given `features`, or `""` if none exists. It may be given the `scores` so that it does not have to recompute them.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -92,7 +87,7 @@ averagedPerceptron({
 
 ### `scores(features)`
 
-Returns an object with the scores of each label in the given `features`.
+Returns an object with the score of each label in the given `features`.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -106,13 +101,15 @@ averagedPerceptron({
 
 ### `update(features, label, guess)`
 
-Returns the perceptron, updating the weights with the respective value of each of the given `features` if the given `label` is not predicted. It can be given the `guess` so that it does not have to recompute it.
+Returns the perceptron, updating the weights with the respective value of each of the given `features` if the given `label` is not predicted. It may be given the `guess` so that it does not have to recompute it.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
 
 averagedPerceptron().update({ x: 1, y: 1 }, "a");
 ```
+
+_Note that `update()` may be given feature-label pairs that have not been preinitialized (unknown a priori), so the model may be used for [online learning](https://en.wikipedia.org/wiki/Online_machine_learning)._
 
 ### `weights()`
 
@@ -127,6 +124,8 @@ averagedPerceptron({
 }).weights();
 // => { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } }
 ```
+
+_Note that the weights are stored as an object, because this perceptron is optimized for sparse features._
 
 ## License
 

@@ -1,9 +1,9 @@
 const { hasOwnProperty } = Object;
 
 /**
- * Returns a perceptron object. Can be initialized from the given `weights`. If
- * given `weights`, the number of iterations used to obtain them are the given
- * `iterations`, or `0` by default.
+ * Returns a perceptron object. It may be initialized from the given `weights`.
+ * When given `weights`, the number of iterations used to obtain them are the
+ * given `iterations`, or `0` by default.
  */
 export default function (weights = {}, iterations = 0) {
   if (typeof weights !== "object" || weights == null) {
@@ -20,7 +20,7 @@ export default function (weights = {}, iterations = 0) {
   const perceptron = {
     /**
      * Returns the label predicted from the given `features`, or `""` if none
-     * exists. It can be given the `scores` so that it does not have to
+     * exists. It may be given the `scores` so that it does not have to
      * recompute them.
      */
     predict(features = {}, scores = perceptron.scores(features)) {
@@ -37,7 +37,7 @@ export default function (weights = {}, iterations = 0) {
     },
 
     /**
-     * Returns an object with the scores of each label in the given `features`.
+     * Returns an object with the score of each label in the given `features`.
      */
     scores(features = {}) {
       const scores = {};
@@ -56,7 +56,7 @@ export default function (weights = {}, iterations = 0) {
     /**
      * Returns the perceptron, updating the weights with the respective value of
      * each of the given `features` if the given `label` is not predicted. It
-     * can be given the `guess` so that it does not have to recompute it.
+     * may be given the `guess` so that it does not have to recompute it.
      */
     update(features = {}, label = "", guess = perceptron.predict(features)) {
       if (label === guess) {

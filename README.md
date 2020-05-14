@@ -1,6 +1,6 @@
 # averaged-perceptron
 
-[![npm version](https://img.shields.io/npm/v/averaged-perceptron.svg?style=flat-square)](https://www.npmjs.com/package/averaged-perceptron)
+[![npm version](https://badgen.net/npm/v/averaged-perceptron)](https://www.npmjs.com/package/averaged-perceptron)
 [![build status](https://github.com/rtomrud/averaged-perceptron/workflows/build/badge.svg)](https://github.com/rtomrud/averaged-perceptron/actions?query=branch%3Amaster+workflow%3Abuild)
 [![Code size](https://badgen.net/bundlephobia/minzip/averaged-perceptron)](https://bundlephobia.com/result?p=averaged-perceptron)
 

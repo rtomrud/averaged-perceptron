@@ -59,41 +59,41 @@ export default function (weights = {}, iterations = 0) {
      * may be given the `guess` so that it does not have to recompute it.
      */
     update(features = {}, label = "", guess = perceptron.predict(features)) {
-      if (label === guess) {
-        iteration += 1;
-        return perceptron;
-      }
+      if (label !== guess) {
+        Object.keys(features).forEach((feature) => {
+          if (!hasOwnProperty.call(weights, feature)) {
+            weights[feature] = {};
+          }
 
-      Object.keys(features).forEach((feature) => {
-        if (!hasOwnProperty.call(weights, feature)) {
-          weights[feature] = {};
-        }
+          if (!hasOwnProperty.call(weightsHistory, feature)) {
+            weightsHistory[feature] = {};
+          }
 
-        if (!hasOwnProperty.call(weightsHistory, feature)) {
-          weightsHistory[feature] = {};
-        }
-
-        const value = features[feature];
-        const classes = weights[feature];
-        const classesHistory = weightsHistory[feature];
-        const { [label]: labelWeight = 0, [guess]: guessWeight = 0 } = classes;
-        const {
-          [label]: [labelTotal, labelTimestamp] = [0, 0],
-          [guess]: [guessTotal, guessTimestamp] = [0, 0],
-        } = classesHistory;
-        classes[label] = labelWeight + value;
-        classesHistory[label] = [
-          labelTotal + labelWeight * (iteration - labelTimestamp),
-          iteration,
-        ];
-        if (guess !== "") {
-          classes[guess] = guessWeight - value;
-          classesHistory[guess] = [
-            guessTotal + guessWeight * (iteration - guessTimestamp),
+          const value = features[feature];
+          const classes = weights[feature];
+          const classesHistory = weightsHistory[feature];
+          const {
+            [label]: labelWeight = 0,
+            [guess]: guessWeight = 0,
+          } = classes;
+          const {
+            [label]: [labelTotal, labelTimestamp] = [0, 0],
+            [guess]: [guessTotal, guessTimestamp] = [0, 0],
+          } = classesHistory;
+          classes[label] = labelWeight + value;
+          classesHistory[label] = [
+            labelTotal + labelWeight * (iteration - labelTimestamp),
             iteration,
           ];
-        }
-      });
+          if (guess !== "") {
+            classes[guess] = guessWeight - value;
+            classesHistory[guess] = [
+              guessTotal + guessWeight * (iteration - guessTimestamp),
+              iteration,
+            ];
+          }
+        });
+      }
 
       iteration += 1;
       return perceptron;

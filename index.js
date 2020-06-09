@@ -26,13 +26,16 @@ export default function (weights = {}, iterations = 0) {
     predict(features = {}, scores = perceptron.scores(features)) {
       let bestScore = -Infinity;
       let prediction = "";
-      Object.keys(scores).forEach((label) => {
+      const keys = Object.keys(scores);
+      for (let i = 0; i < keys.length; i += 1) {
+        const label = keys[i];
         const score = scores[label];
         if (score > bestScore) {
           bestScore = score;
           prediction = label;
         }
-      });
+      }
+
       return prediction;
     },
 

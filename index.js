@@ -7,11 +7,11 @@ const { hasOwnProperty } = Object;
  */
 export default function (weights = {}, iterations = 0) {
   if (typeof weights !== "object" || weights == null) {
-    throw TypeError();
+    throw TypeError(`${weights} is not an object`);
   }
 
   if (!Number.isSafeInteger(iterations) || iterations < 0) {
-    throw RangeError();
+    throw RangeError(`${iterations} is not a whole number`);
   }
 
   const weightsHistory = {};

@@ -68,7 +68,9 @@ export default function (weights = {}, iterations = 0) {
      */
     update(features = {}, label = "", guess = perceptron.predict(features)) {
       if (label !== guess) {
-        Object.keys(features).forEach((feature) => {
+        const keys = Object.keys(features);
+        for (let i = 0; i < keys.length; i += 1) {
+          const feature = keys[i];
           if (!hasOwnProperty.call(weights, feature)) {
             weights[feature] = {};
           }
@@ -100,7 +102,7 @@ export default function (weights = {}, iterations = 0) {
               iteration,
             ];
           }
-        });
+        }
       }
 
       iteration += 1;

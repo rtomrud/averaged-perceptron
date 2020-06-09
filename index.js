@@ -44,15 +44,20 @@ export default function (weights = {}, iterations = 0) {
      */
     scores(features = {}) {
       const scores = {};
-      Object.keys(features).forEach((feature) => {
+      const keys = Object.keys(features);
+      for (let i = 0; i < keys.length; i += 1) {
+        const feature = keys[i];
         const classes = weights[feature];
         const value = features[feature];
         if (classes && value !== 0) {
-          Object.keys(classes).forEach((label) => {
+          const keys = Object.keys(classes);
+          for (let i = 0; i < keys.length; i += 1) {
+            const label = keys[i];
             scores[label] = (scores[label] || 0) + classes[label] * value;
-          });
+          }
         }
-      });
+      }
+
       return scores;
     },
 

@@ -4,7 +4,7 @@
  * `iterations`, or `0` by default.
  */
 // eslint-disable-next-line max-lines-per-function
-export default function(weights = {}, iterations = 0) {
+export default function (weights = {}, iterations = 0) {
   if (typeof weights !== "object" || weights == null) {
     throw TypeError();
   }
@@ -21,7 +21,7 @@ export default function(weights = {}, iterations = 0) {
      * Returns the predicted label from the given `features`, or `null` if none
      * exists. Can be given the `scores` used to predict.
      */
-    predict(features = {}, scores = perceptron.scores(features)) {
+    predict(features = {}, labels = [], scores = perceptron.scores(features, labels)) {
       let bestScore = -Infinity;
       let prediction = null;
       Object.entries(scores).forEach(([label, score]) => {
@@ -36,32 +36,23 @@ export default function(weights = {}, iterations = 0) {
     /**
      * Returns an object with the scores of each label in the given `features`.
      */
-    scores(features = {}) {
+    scores(features = {}, labels = []) {
       const scores = {};
       Object.entries(features).forEach(([feature, value]) => {
         if (value === 0 || weights[feature] == null) {
           return scores;
         }
 
-        return Object.entries(weights[feature]).forEach(([label, weight]) => {
+        const entries = Object.entries(weights[feature]);
+        const validEntries =
+          labels.length === 0
+            ? entries
+            : entries.filter(([label]) => labels.includes(label));
+        return validEntries.forEach(([label, weight]) => {
           scores[label] = (scores[label] || 0) + weight * value;
         });
       });
       return scores;
-    },
-
-    /**
-     * Returns an object with the score for the given `label` and `features`.
-     */
-    score(features = {}, label = "") {
-      return Object.entries(features).reduce((score, [feature, value]) => {
-        if (value === 0 || weights[feature] == null) {
-          return score;
-        }
-
-        const weight = weights[feature][label];
-        return score + weight * value;
-      }, 0);
     },
 
     /**
@@ -89,18 +80,18 @@ export default function(weights = {}, iterations = 0) {
         const { [label]: labelWeight = 0, [guess]: guessWeight = 0 } = classes;
         const {
           [label]: [labelTotal, labelTimestamp] = [0, 0],
-          [guess]: [guessTotal, guessTimestamp] = [0, 0]
+          [guess]: [guessTotal, guessTimestamp] = [0, 0],
         } = classesHistory;
         classes[label] = labelWeight + value;
         classesHistory[label] = [
           labelTotal + labelWeight * (iteration - labelTimestamp),
-          iteration
+          iteration,
         ];
         if (guess != null) {
           classes[guess] = guessWeight - value;
           classesHistory[guess] = [
             guessTotal + guessWeight * (iteration - guessTimestamp),
-            iteration
+            iteration,
           ];
         }
       });
@@ -127,7 +118,7 @@ export default function(weights = {}, iterations = 0) {
         });
       });
       return averagedWeights;
-    }
+    },
   };
 
   return perceptron;

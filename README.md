@@ -71,9 +71,9 @@ const iterations = 1000; // Weights obtained with 1000 update() calls
 const perceptron = averagedPerceptron(weights, 1000);
 ```
 
-### `predict(features, scores)`
+### `predict(features)`
 
-Returns the label predicted from the given `features`, or `""` if none exists. It may be given the `scores` so that it does not have to recompute them.
+Returns the label predicted from the given `features`, or `""` if none exists.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -83,20 +83,6 @@ averagedPerceptron({
   y: { a: 0.8, b: -0.4 }
 }).predict({ x: 1, y: 1 });
 // => "a"
-```
-
-### `scores(features)`
-
-Returns an object with the score of each label in the given `features`.
-
-```js
-import averagedPerceptron from "averaged-perceptron";
-
-averagedPerceptron({
-  x: { a: 0.4, b: 0.6 },
-  y: { a: 0.8, b: -0.4 }
-}).scores({ a: 1, b: 1 });
-// => { a: 1.2, b: 0.2 }
 ```
 
 ### `update(features, label, guess)`

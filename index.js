@@ -20,15 +20,23 @@ export default function (weights = {}, iterations = 0) {
   const perceptron = {
     /**
      * Returns the label predicted from the given `features`, or `""` if none
-     * exists. It may be given the `scores` so that it does not have to
-     * recompute them.
+     * exists.
      */
-    predict(features = {}, scores = perceptron.scores(features)) {
+    predict(features = {}) {
+      const scores = {};
+      for (const feature in features) {
+        const classes = weights[feature];
+        const value = features[feature];
+        if (classes && value) {
+          for (const label in classes) {
+            scores[label] = (scores[label] || 0) + classes[label] * value;
+          }
+        }
+      }
+
       let bestScore = -Infinity;
       let prediction = "";
-      const keys = Object.keys(scores);
-      for (let i = 0; i < keys.length; i += 1) {
-        const label = keys[i];
+      for (const label in scores) {
         const score = scores[label];
         if (score > bestScore) {
           bestScore = score;
@@ -37,28 +45,6 @@ export default function (weights = {}, iterations = 0) {
       }
 
       return prediction;
-    },
-
-    /**
-     * Returns an object with the score of each label in the given `features`.
-     */
-    scores(features = {}) {
-      const scores = {};
-      const keys = Object.keys(features);
-      for (let i = 0; i < keys.length; i += 1) {
-        const feature = keys[i];
-        const classes = weights[feature];
-        const value = features[feature];
-        if (classes && value !== 0) {
-          const keys = Object.keys(classes);
-          for (let i = 0; i < keys.length; i += 1) {
-            const label = keys[i];
-            scores[label] = (scores[label] || 0) + classes[label] * value;
-          }
-        }
-      }
-
-      return scores;
     },
 
     /**

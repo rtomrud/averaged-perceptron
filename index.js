@@ -54,9 +54,7 @@ export default function (weights = {}, iterations = 0) {
      */
     update(features = {}, label = "", guess = perceptron.predict(features)) {
       if (label !== guess) {
-        const keys = Object.keys(features);
-        for (let i = 0; i < keys.length; i += 1) {
-          const feature = keys[i];
+        for (const feature in features) {
           if (!hasOwnProperty.call(weights, feature)) {
             weights[feature] = {};
           }
@@ -102,18 +100,19 @@ export default function (weights = {}, iterations = 0) {
     weights() {
       const iterations = iteration || 1;
       const averagedWeights = {};
-      Object.keys(weights).forEach((feature) => {
+      for (const feature in weights) {
         const classes = weights[feature];
         const classesHistory = weightsHistory[feature] || {};
         const averagedClasses = {};
         averagedWeights[feature] = averagedClasses;
-        Object.keys(classes).forEach((label) => {
+        for (const label in classes) {
           const weight = classes[label];
           const [total = 0, timestamp = 0] = classesHistory[label] || [];
           const updatedTotal = total + weight * (iterations - timestamp);
           averagedClasses[label] = updatedTotal / iterations;
-        });
-      });
+        }
+      }
+
       return averagedWeights;
     },
   };

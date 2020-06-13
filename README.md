@@ -48,9 +48,9 @@ A slightly more realistic example using the [Iris dataset](https://en.wikipedia.
 
 ## API
 
-### `averagedPerceptron(weights, iterations)`
+### `averagedPerceptron([weights [, iterations]])`
 
-Returns a perceptron object. It may be initialized from the given `weights`. When given `weights`, the number of iterations used to obtain them are the given `iterations`, or `0` by default.
+Returns a perceptron object. It may be initialized with `weights`, an object of objects with the weight of each feature-label pair. When initialized with `weights`, the number of iterations used to obtain them are  `iterations`, or `0` by default.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -59,21 +59,22 @@ import averagedPerceptron from "averaged-perceptron";
 const perceptron = averagedPerceptron();
 ```
 
-If you want to train the model in multiple sessions, optionally persisting the weights between them, you may resume training by giving the number of iterations, that is, the number of times `update()` was called to obtain the given `weights`.
+If you want to train the model in multiple sessions, you may resume training by specifying the `iterations`, which is the number of times `update()` was called to obtain the weights. That way new `update()` calls are properly averaged against the pretrained `weights`.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
 
-// Create a perceptron from already existing weights
+// Create a perceptron from pretrained weights to do further training
 const weightsJSON = '{"x":{"a":0.4,"b":0.6},"y":{"a":0.8,"b":-0.4}}';
 const weights = JSON.parse(weightsJSON);
-const iterations = 1000; // Weights obtained with 1000 update() calls
-const perceptron = averagedPerceptron(weights, 1000);
+const iterations = 1000; // weights obtained with 1000 update() calls
+const perceptron = averagedPerceptron(weights, iterations);
+// Keep training by calling update()
 ```
 
 ### `predict(features)`
 
-Returns the label predicted from the given `features`, or `""` if none exists.
+Returns the label predicted from the values in `features`, or `""` if none exists.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -85,9 +86,9 @@ averagedPerceptron({
 // => "a"
 ```
 
-### `update(features, label, guess)`
+### `update(features, label [, guess])`
 
-Returns the perceptron, updating the weights with the respective value of each of the given `features` if the given `label` is not predicted. It may be given the `guess` so that it does not have to recompute it.
+Returns the perceptron, updating its weights with the respective values in `features` if `label` does not equal `guess`. If `guess` is not given, it defaults to the output of `predict(features)`.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -95,11 +96,11 @@ import averagedPerceptron from "averaged-perceptron";
 averagedPerceptron().update({ x: 1, y: 1 }, "a");
 ```
 
-_Note that `update()` may be given feature-label pairs that have not been preinitialized (unknown a priori), so the model may be used for [online learning](https://en.wikipedia.org/wiki/Online_machine_learning)._
+_Note that `update()` may be given feature-label pairs whose weights have not been preinitialized, so the model may be used for [online learning](https://en.wikipedia.org/wiki/Online_machine_learning) when the features or labels are unknown a priori._
 
 ### `weights()`
 
-Returns an object of features where each feature is an object of labels with the weight of each feature-label pair.
+Returns an object of objects with the weight of each feature-label pair.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
@@ -111,7 +112,7 @@ averagedPerceptron({
 // => { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } }
 ```
 
-_Note that the weights are stored as an object, because this perceptron is optimized for sparse features._
+_Note that the weights are stored as an object of objects, because this perceptron is optimized for sparse features._
 
 ## License
 

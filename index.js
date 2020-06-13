@@ -1,5 +1,3 @@
-const { hasOwnProperty } = Object;
-
 /**
  * Returns a perceptron object. It may be initialized from the given `weights`.
  * When given `weights`, the number of iterations used to obtain them are the
@@ -14,9 +12,8 @@ export default function (weights = {}, iterations = 0) {
     throw RangeError(`${iterations} is not a whole number`);
   }
 
-  const weightsHistory = {};
-  let iteration = iterations;
-
+  let i = iterations;
+  const accumulatedWeights = {};
   const perceptron = {
     /**
      * Returns the label predicted from the given `features`, or `""` if none
@@ -55,41 +52,31 @@ export default function (weights = {}, iterations = 0) {
     update(features = {}, label = "", guess = perceptron.predict(features)) {
       if (label !== guess) {
         for (const feature in features) {
-          if (!hasOwnProperty.call(weights, feature)) {
+          if (!weights[feature]) {
             weights[feature] = {};
           }
 
-          if (!hasOwnProperty.call(weightsHistory, feature)) {
-            weightsHistory[feature] = {};
+          if (!accumulatedWeights[feature]) {
+            accumulatedWeights[feature] = {};
           }
 
           const value = features[feature];
           const classes = weights[feature];
-          const classesHistory = weightsHistory[feature];
-          const {
-            [label]: labelWeight = 0,
-            [guess]: guessWeight = 0,
-          } = classes;
-          const {
-            [label]: [labelTotal, labelTimestamp] = [0, 0],
-            [guess]: [guessTotal, guessTimestamp] = [0, 0],
-          } = classesHistory;
-          classes[label] = labelWeight + value;
-          classesHistory[label] = [
-            labelTotal + labelWeight * (iteration - labelTimestamp),
-            iteration,
-          ];
-          if (guess !== "") {
-            classes[guess] = guessWeight - value;
-            classesHistory[guess] = [
-              guessTotal + guessWeight * (iteration - guessTimestamp),
-              iteration,
-            ];
+          const accumulatedClasses = accumulatedWeights[feature];
+          const { [label]: weight = 0 } = classes;
+          const { [label]: [total, timestamp] = [0, 0] } = accumulatedClasses;
+          classes[label] = weight + value;
+          accumulatedClasses[label] = [total + weight * (i - timestamp), i];
+          if (guess) {
+            const { [guess]: weight = 0 } = classes;
+            const { [guess]: [total, timestamp] = [0, 0] } = accumulatedClasses;
+            classes[guess] = weight - value;
+            accumulatedClasses[guess] = [total + weight * (i - timestamp), i];
           }
         }
       }
 
-      iteration += 1;
+      i += 1;
       return perceptron;
     },
 
@@ -98,24 +85,23 @@ export default function (weights = {}, iterations = 0) {
      * with the weight of each feature-label pair.
      */
     weights() {
-      const iterations = iteration || 1;
+      const iterations = i || 1;
       const averagedWeights = {};
       for (const feature in weights) {
         const classes = weights[feature];
-        const classesHistory = weightsHistory[feature] || {};
+        const accumulatedClasses = accumulatedWeights[feature] || {};
         const averagedClasses = {};
         averagedWeights[feature] = averagedClasses;
         for (const label in classes) {
           const weight = classes[label];
-          const [total = 0, timestamp = 0] = classesHistory[label] || [];
-          const updatedTotal = total + weight * (iterations - timestamp);
-          averagedClasses[label] = updatedTotal / iterations;
+          const [total = 0, timestamp = 0] = accumulatedClasses[label] || [];
+          const newTotal = total + weight * (iterations - timestamp);
+          averagedClasses[label] = newTotal / iterations;
         }
       }
 
       return averagedWeights;
     },
   };
-
   return perceptron;
 }

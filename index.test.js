@@ -1,7 +1,6 @@
-import test from "tape";
 import averagedPerceptron from "./index.js";
 
-test("averaged-perceptron with the Iris dataset", ({ equal, end }) => {
+test("averaged-perceptron with the Iris dataset", () => {
   // Note that the features can be either an object or an array
   const trainingDataset = [
     [[5.1, 3.5, 1.4, 0.2], "Iris setosa"],
@@ -171,268 +170,186 @@ test("averaged-perceptron with the Iris dataset", ({ equal, end }) => {
   );
 
   // The dataset is not fully linearly separable, so some errors are expected
-  equal(errors < 5, true, "predicts with less than 10% error rate");
-  end();
+  expect(errors < 5).toBe(true);
 });
 
-test("averaged-perceptron factory function", ({ deepEqual, throws, end }) => {
-  throws(
-    () => averagedPerceptron(true),
-    TypeError,
-    "throws TypeError given true as the first argument"
-  );
-  throws(
-    () => averagedPerceptron(false),
-    TypeError,
-    "throws TypeError given false as the first argument"
-  );
-  throws(
-    () => averagedPerceptron(null),
-    TypeError,
-    "throws TypeError given null as the first argument"
-  );
-  throws(
-    () => averagedPerceptron(""),
-    TypeError,
-    "throws TypeError given a string as the first argument"
-  );
-  throws(
-    () => averagedPerceptron(0),
-    TypeError,
-    "throws TypeError given a number as the first argument"
-  );
-  throws(
-    () => averagedPerceptron({}, true),
-    RangeError,
-    "throws RangeError given true as the second argument"
-  );
-  throws(
-    () => averagedPerceptron({}, false),
-    RangeError,
-    "throws RangeError given false as the second argument"
-  );
-  throws(
-    () => averagedPerceptron({}, null),
-    RangeError,
-    "throws RangeError given null as the second argument"
-  );
-  throws(
-    () => averagedPerceptron({}, ""),
-    RangeError,
-    "throws RangeError given a string as the second argument"
-  );
-  throws(
-    () => averagedPerceptron({}, Infinity),
-    RangeError,
-    "throws RangeError given Infinity as the second argument"
-  );
-  throws(
-    () => averagedPerceptron({}, NaN),
-    RangeError,
-    "throws RangeError given NaN as the second argument"
-  );
-  throws(
-    () => averagedPerceptron({}, 1.5),
-    RangeError,
-    "throws RangeError given a float as the second argument"
-  );
-  throws(
-    () => averagedPerceptron({}, -1),
-    RangeError,
-    "throws RangeError given a negative integer as the second argument"
-  );
-  deepEqual(
-    averagedPerceptron({ 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } }).weights(),
-    { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } },
-    "accepts weights as an object"
-  );
-  deepEqual(
-    averagedPerceptron({ 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } }, 1).weights(),
-    { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } },
-    "accepts pretrained weights as an object"
-  );
-  deepEqual(
+test("averaged-perceptron factory function with invalid 1st argument", () => {
+  expect(() => averagedPerceptron(true)).toThrowError(TypeError);
+  expect(() => averagedPerceptron(false)).toThrowError(TypeError);
+  expect(() => averagedPerceptron(null)).toThrowError(TypeError);
+  expect(() => averagedPerceptron("")).toThrowError(TypeError);
+  expect(() => averagedPerceptron(0)).toThrowError(TypeError);
+});
+
+test("averaged-perceptron factory function with invalid 2nd argument", () => {
+  expect(() => averagedPerceptron({}, true)).toThrowError(RangeError);
+  expect(() => averagedPerceptron({}, false)).toThrowError(RangeError);
+  expect(() => averagedPerceptron({}, null)).toThrowError(RangeError);
+  expect(() => averagedPerceptron({}, "")).toThrowError(RangeError);
+  expect(() => averagedPerceptron({}, Infinity)).toThrowError(RangeError);
+  expect(() => averagedPerceptron({}, NaN)).toThrowError(RangeError);
+  expect(() => averagedPerceptron({}, 1.5)).toThrowError(RangeError);
+  expect(() => averagedPerceptron({}, -1)).toThrowError(RangeError);
+});
+
+test("averaged-perceptron factory function with weights object", () => {
+  expect(
+    averagedPerceptron({ 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } }).weights()
+  ).toEqual({
+    0: { 0: 1, 1: 2 },
+    1: { 0: 3, 1: 4 },
+  });
+});
+
+test("averaged-perceptron factory function with weights object (pretrained)", () => {
+  expect(
+    averagedPerceptron({ 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } }, 1).weights()
+  ).toEqual({
+    0: { 0: 1, 1: 2 },
+    1: { 0: 3, 1: 4 },
+  });
+});
+
+test("averaged-perceptron factory function with weights array", () => {
+  expect(
     averagedPerceptron([
       [1, 2],
       [3, 4],
-    ]).weights(),
-    { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } },
-    "accepts weights as an array"
-  );
-  deepEqual(
+    ]).weights()
+  ).toEqual({
+    0: { 0: 1, 1: 2 },
+    1: { 0: 3, 1: 4 },
+  });
+});
+
+test("averaged-perceptron factory function with weights array (pretrained)", () => {
+  expect(
     averagedPerceptron(
       [
         [1, 2],
         [3, 4],
       ],
       1
-    ).weights(),
-    { 0: { 0: 1, 1: 2 }, 1: { 0: 3, 1: 4 } },
-    "accepts pretrained weights as an array"
-  );
-  end();
+    ).weights()
+  ).toEqual({
+    0: { 0: 1, 1: 2 },
+    1: { 0: 3, 1: 4 },
+  });
 });
 
-test("averaged-perceptron predict()", ({ deepEqual, end }) => {
-  deepEqual(
+test("averaged-perceptron predict() with no argument", () => {
+  expect(
     averagedPerceptron({
       x: { a: 0.4, b: 0.6 },
       y: { a: 0.8, b: -0.4 },
-    }).predict(),
-    "",
-    'returns "" given nothing'
-  );
-  deepEqual(
-    averagedPerceptron({
-      x: { a: 0.4, b: 0.6 },
-      y: { a: 0.8, b: -0.4 },
-    }).predict({ x: 1 }),
-    "b",
-    "returns the guessed label given a positive feature"
-  );
-  deepEqual(
-    averagedPerceptron({
-      x: { a: 0.4, b: 0.6 },
-      y: { a: 0.8, b: -0.4 },
-    }).predict({ x: -1 }),
-    "a",
-    "returns the guessed label given a negative feature"
-  );
-  deepEqual(
-    averagedPerceptron({
-      x: { a: 0.4, b: 0.6 },
-      y: { a: 0.8, b: -0.4 },
-    }).predict({ x: 1, y: 0 }),
-    "b",
-    "returns the guessed label given a feature with a value of 0"
-  );
-  deepEqual(
-    averagedPerceptron({
-      x: { a: 0.4, b: 0.6 },
-      y: { a: 0.8, b: -0.4 },
-    }).predict({ x: 1, y: 1 }),
-    "a",
-    "returns the guessed label given features with equal values"
-  );
-  end();
+    }).predict()
+  ).toEqual("");
 });
 
-test("averaged-perceptron update()", ({ deepEqual, end }) => {
-  deepEqual(
+test("averaged-perceptron predict() with features", () => {
+  const model = averagedPerceptron({
+    x: { a: 0.4, b: 0.6 },
+    y: { a: 0.8, b: -0.4 },
+  });
+  expect(model.predict({ x: 1 })).toEqual("b");
+  expect(model.predict({ x: -1 })).toEqual("a");
+  expect(model.predict({ x: 1, y: 0 })).toEqual("b");
+  expect(model.predict({ x: 1, y: 1 })).toEqual("a");
+});
+
+test("averaged-perceptron update() with no argument", () => {
+  expect(
     averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
       .update()
-      .weights(),
-    { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } },
-    "doesn't update any weight given nothing"
-  );
-  deepEqual(
-    averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
-      .update({ x: 1, y: 1 }, "a")
-      .weights(),
-    { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } },
-    "doesn't update any weight given a correct prediction"
-  );
-  deepEqual(
-    averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
-      .update({ x: 1, y: 2 }, "b")
-      .weights(),
-    { x: { a: 0.4 - 1, b: 0.6 + 1 }, y: { a: 0.8 - 2, b: -0.4 + 2 } },
-    "updates weights given a wrong prediction"
-  );
-  deepEqual(
-    averagedPerceptron({ x: { a: 0.4, b: 0.6 } })
-      .update({ x: 1, y: 1 }, "a")
-      .weights(),
-    { x: { a: 0.4 + 1, b: 0.6 - 1 }, y: { a: 1, b: -1 } },
-    "updates weights given a wrong prediction when missing features"
-  );
-  deepEqual(
-    averagedPerceptron({ x: {}, y: {} }).update({ x: 1, y: 1 }, "a").weights(),
-    { x: { a: 1 }, y: { a: 1 } },
-    "updates weights given a wrong prediction when missing labels"
-  );
-  end();
+      .weights()
+  ).toEqual({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } });
 });
 
-test("averaged-perceptron weights()", ({ deepEqual, end }) => {
-  deepEqual(
-    averagedPerceptron().weights(),
-    {},
-    "returns empty weights when weights uninitialized haven't been initialized"
-  );
-  deepEqual(
-    averagedPerceptron({
-      x: { a: 0.4, b: 0.6 },
-      y: { a: 0.8, b: -0.4 },
-    }).weights(),
-    { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } },
-    "returns the same weights given no updates"
-  );
-  deepEqual(
+test("averaged-perceptron update() with a correct label", () => {
+  expect(
     averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
       .update({ x: 1, y: 1 }, "a")
-      .weights(),
-    { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } },
-    "returns the same weights given one correct prediction"
-  );
-  deepEqual(
+      .weights()
+  ).toEqual({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } });
+});
+
+test("averaged-perceptron update() with a wrong label", () => {
+  expect(
     averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
+      .update({ x: 1, y: 2 }, "b")
+      .weights()
+  ).toEqual({ x: { a: 0.4 - 1, b: 0.6 + 1 }, y: { a: 0.8 - 2, b: -0.4 + 2 } });
+});
+
+test("averaged-perceptron update() with unknown features", () => {
+  expect(
+    averagedPerceptron({ x: { a: 0.4, b: 0.6 } })
       .update({ x: 1, y: 1 }, "a")
-      .update({ x: 1, y: 1 }, "a")
-      .weights(),
+      .weights()
+  ).toEqual({ x: { a: 0.4 + 1, b: 0.6 - 1 }, y: { a: 1, b: -1 } });
+});
+
+test("averaged-perceptron update() with unknown labels", () => {
+  expect(
+    averagedPerceptron({ x: {}, y: {} }).update({ x: 1, y: 1 }, "a").weights()
+  ).toEqual({ x: { a: 1 }, y: { a: 1 } });
+});
+
+test("averaged-perceptron weights() with uninitialized weights", () => {
+  expect(averagedPerceptron().weights()).toEqual({});
+});
+
+test("averaged-perceptron weights() with unmodified weights", () => {
+  const model = averagedPerceptron({
+    x: { a: 0.4, b: 0.6 },
+    y: { a: 0.8, b: -0.4 },
+  });
+  expect(model.weights()).toEqual({
+    x: { a: 0.4, b: 0.6 },
+    y: { a: 0.8, b: -0.4 },
+  });
+  expect(model.update({ x: 1, y: 1 }, "a").weights()).toEqual({
+    x: { a: 0.4, b: 0.6 },
+    y: { a: 0.8, b: -0.4 },
+  });
+  expect(model.update({ x: 1, y: 1 }, "a").weights()).toEqual({
+    x: { a: 0.4, b: 0.6 },
+    y: { a: 0.8, b: -0.4 },
+  });
+});
+
+test("averaged-perceptron weights() with updated weights", () => {
+  const model = averagedPerceptron({
+    x: { a: 0.4, b: 0.6 },
+    y: { a: 0.8, b: -0.4 },
+  });
+  expect(model.update({ x: 1, y: 2 }, "b").weights()).toEqual({
+    x: { a: 0.4 - 1, b: 0.6 + 1 },
+    y: { a: 0.8 - 2, b: -0.4 + 2 },
+  });
+  expect(model.update({ x: 3, y: 4 }, "a").weights()).toEqual({
+    x: { a: (0.4 - 1 + (0.4 - 1 + 3)) / 2, b: (0.6 + 1 + (0.6 + 1 - 3)) / 2 },
+    y: { a: (0.8 - 2 + (0.8 - 2 + 4)) / 2, b: (-0.4 + 2 + (-0.4 + 2 - 4)) / 2 },
+  });
+});
+
+test("averaged-perceptron weights() with updated weights (pretrained)", () => {
+  const model = averagedPerceptron(
     { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } },
-    "returns the same weights given many correct predictions"
+    3
   );
-  deepEqual(
-    averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
-      .update({ x: 1, y: 2 }, "b")
-      .weights(),
-    { x: { a: 0.4 - 1, b: 0.6 + 1 }, y: { a: 0.8 - 2, b: -0.4 + 2 } },
-    "returns the averages given one wrong prediction"
-  );
-  deepEqual(
-    averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } })
-      .update({ x: 1, y: 2 }, "b")
-      .update({ x: 3, y: 4 }, "a")
-      .weights(),
-    {
-      x: {
-        a: (0.4 - 1 + (0.4 - 1 + 3)) / 2,
-        b: (0.6 + 1 + (0.6 + 1 - 3)) / 2,
-      },
-      y: {
-        a: (0.8 - 2 + (0.8 - 2 + 4)) / 2,
-        b: (-0.4 + 2 + (-0.4 + 2 - 4)) / 2,
-      },
+  expect(model.update({ x: 1, y: 2 }, "b").weights()).toEqual({
+    x: { a: (3 * 0.4 + (0.4 - 1)) / 4, b: (3 * 0.6 + (0.6 + 1)) / 4 },
+    y: { a: (3 * 0.8 + (0.8 - 2)) / 4, b: (3 * -0.4 + (-0.4 + 2)) / 4 },
+  });
+  expect(model.update({ x: 3, y: 4 }, "a").weights()).toEqual({
+    x: {
+      a: (3 * 0.4 + (0.4 - 1 + (0.4 - 1 + 3))) / 5,
+      b: (3 * 0.6 + (0.6 + 1 + (0.6 + 1 - 3))) / 5,
     },
-    "returns the averages given many wrong predictions"
-  );
-  deepEqual(
-    averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } }, 3)
-      .update({ x: 1, y: 2 }, "b")
-      .weights(),
-    {
-      x: { a: (3 * 0.4 + (0.4 - 1)) / 4, b: (3 * 0.6 + (0.6 + 1)) / 4 },
-      y: { a: (3 * 0.8 + (0.8 - 2)) / 4, b: (3 * -0.4 + (-0.4 + 2)) / 4 },
+    y: {
+      a: (3 * 0.8 + (0.8 - 2 + (0.8 - 2 + 4))) / 5,
+      b: (3 * -0.4 + (-0.4 + 2 + (-0.4 + 2 - 4))) / 5,
     },
-    "returns the averages given one wrong prediction and pretrained weights"
-  );
-  deepEqual(
-    averagedPerceptron({ x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } }, 3)
-      .update({ x: 1, y: 2 }, "b")
-      .update({ x: 3, y: 4 }, "a")
-      .weights(),
-    {
-      x: {
-        a: (3 * 0.4 + (0.4 - 1 + (0.4 - 1 + 3))) / 5,
-        b: (3 * 0.6 + (0.6 + 1 + (0.6 + 1 - 3))) / 5,
-      },
-      y: {
-        a: (3 * 0.8 + (0.8 - 2 + (0.8 - 2 + 4))) / 5,
-        b: (3 * -0.4 + (-0.4 + 2 + (-0.4 + 2 - 4))) / 5,
-      },
-    },
-    "returns the averages given many wrong predictions and pretrained weights"
-  );
-  end();
+  });
 });

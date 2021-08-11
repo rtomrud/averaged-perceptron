@@ -47,5 +47,10 @@
   },
   "esm": {
     "sourceMap": true
+  },
+  "type": "module",
+  "exports": {
+    "import": "./index.js",
+    "default": "./dist/index.js"
   }
 }

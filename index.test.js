@@ -1,4 +1,4 @@
-import test from "./node_modules/tape/index.js";
+import test from "tape";
 import averagedPerceptron from "./index.js";
 
 test("averaged-perceptron with the Iris dataset", ({ equal, end }) => {

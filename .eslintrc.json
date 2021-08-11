@@ -1,0 +1,11 @@
+{
+  "extends": ["eslint-config-pretty-strict"],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "rules": {
+    "guard-for-in": "off"
+  },
+  "root": true
+}

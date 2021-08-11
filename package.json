@@ -22,13 +22,13 @@
     "dist",
     "index.js"
   ],
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/rtomrud/averaged-perceptron.git"
   },
   "scripts": {
-    "build": "rollup -i index.js -o dist/index.js -f cjs --exports auto",
+    "build": "rollup -i index.js -o dist/index.cjs -f cjs --exports auto",
     "lint": "eslint .",
     "prepare": "husky install && npm run build",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
@@ -47,6 +47,6 @@
   "type": "module",
   "exports": {
     "import": "./index.js",
-    "default": "./dist/index.js"
+    "default": "./dist/index.cjs"
   }
 }

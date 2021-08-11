@@ -28,7 +28,7 @@
     "url": "https://github.com/rtomrud/averaged-perceptron.git"
   },
   "scripts": {
-    "build": "rollup -i index.js -o dist/index.js -f cjs",
+    "build": "rollup -i index.js -o dist/index.js -f cjs --exports auto",
     "lint": "eslint .",
     "prepare": "husky install && npm run build",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",

@@ -30,7 +30,7 @@ const trainingDataset = [
   [{ height: 1, width: 2 }, "fat"],
   [{ height: 1, width: 1.1 }, "fat"],
   [{ height: 1.1, width: 1 }, "slim"],
-  [{ height: 4, width: 1 }, "slim"]
+  [{ height: 4, width: 1 }, "slim"],
 ];
 const epochs = 1000;
 for (let epoch = 0; epoch < epochs; epoch += 1) {
@@ -50,13 +50,13 @@ A slightly more realistic example using the [Iris dataset](https://en.wikipedia.
 
 ### `averagedPerceptron([weights [, iterations]])`
 
-Returns a perceptron object. It may be initialized with `weights`, an object of objects with the weight of each feature-label pair. When initialized with `weights`, the number of iterations used to obtain them are  `iterations`, or `0` by default.
+Returns a perceptron object. It may be initialized with `weights`, an object of objects with the weight of each feature-label pair. When initialized with `weights`, the number of iterations used to obtain them are `iterations`, or `0` by default.
 
 ```js
 import averagedPerceptron from "averaged-perceptron";
 
 // Create a new perceptron
-const perceptron = averagedPerceptron();
+const { predict, update, weights } = averagedPerceptron();
 ```
 
 If you want to train the model in multiple sessions, you may resume training by specifying the `iterations`, which is the number of times `update()` was called to obtain the weights. That way new `update()` calls are properly averaged against the pretrained `weights`.
@@ -68,7 +68,7 @@ import averagedPerceptron from "averaged-perceptron";
 const weightsJSON = '{"x":{"a":0.4,"b":0.6},"y":{"a":0.8,"b":-0.4}}';
 const weights = JSON.parse(weightsJSON);
 const iterations = 1000; // weights obtained with 1000 update() calls
-const perceptron = averagedPerceptron(weights, iterations);
+const { predict, update, weights } = averagedPerceptron(weights, iterations);
 // Keep training by calling update()
 ```
 
@@ -79,11 +79,11 @@ Returns the label predicted from the values in `features`, or `""` if none exist
 ```js
 import averagedPerceptron from "averaged-perceptron";
 
-averagedPerceptron({
+const { predict } = averagedPerceptron({
   x: { a: 0.4, b: 0.6 },
-  y: { a: 0.8, b: -0.4 }
-}).predict({ x: 1, y: 1 });
-// => "a"
+  y: { a: 0.8, b: -0.4 },
+});
+predict({ x: 1, y: 1 }); // => "a"
 ```
 
 ### `update(features, label [, guess])`
@@ -93,7 +93,8 @@ Returns the perceptron, updating its weights with the respective values in `feat
 ```js
 import averagedPerceptron from "averaged-perceptron";
 
-averagedPerceptron().update({ x: 1, y: 1 }, "a");
+const { update } = averagedPerceptron();
+update({ x: 1, y: 1 }, "a");
 ```
 
 _Note that `update()` may be given feature-label pairs whose weights have not been preinitialized, so the model may be used for [online learning](https://en.wikipedia.org/wiki/Online_machine_learning) when the features or labels are unknown a priori._
@@ -105,11 +106,11 @@ Returns an object of objects with the weight of each feature-label pair.
 ```js
 import averagedPerceptron from "averaged-perceptron";
 
-averagedPerceptron({
+const { weights } = averagedPerceptron({
   x: { a: 0.4, b: 0.6 },
-  y: { a: 0.8, b: -0.4 }
-}).weights();
-// => { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } }
+  y: { a: 0.8, b: -0.4 },
+});
+weights(); // => { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } }
 ```
 
 _Note that the weights are stored as an object of objects, because this perceptron is optimized for sparse features._

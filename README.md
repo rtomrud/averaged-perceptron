@@ -114,7 +114,3 @@ weights(); // => { x: { a: 0.4, b: 0.6 }, y: { a: 0.8, b: -0.4 } }
 ```
 
 _Note that the weights are stored as an object of objects, because this perceptron is optimized for sparse features._
-
-## License
-
-[MIT](./LICENSE)

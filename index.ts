@@ -1,27 +1,34 @@
+import type {
+  AveragedPerceptron,
+  Features,
+  Labels,
+  Weights,
+} from "./types/index.d.ts";
+
 /**
  * Returns a perceptron object. It may be initialized with `weights`, an object
  * of objects with the weight of each feature-label pair. When initialized with
  * `weights`, the number of iterations used to obtain them are  `iterations`, or
  * `0` by default.
  */
-export default function (weights = {}, iterations = 0) {
-  if (typeof weights !== "object" || weights == null) {
-    throw TypeError(`${weights} is not an object`);
-  }
-
+export default function (weights: Weights = {}, iterations: number = 0) {
   if (!Number.isSafeInteger(iterations) || iterations < 0) {
     throw RangeError(`${iterations} is not a whole number`);
   }
 
   let i = iterations;
-  const accumulatedWeights = {};
-  const perceptron = {
+  const accumulatedWeights: {
+    [feature: string]: {
+      [label: string]: [total: number, timestamp: number];
+    };
+  } = {};
+  const perceptron: AveragedPerceptron = {
     /**
      * Returns the label predicted from the values in `features`, or `""` if
      * none exists.
      */
-    predict(features = {}) {
-      const scores = {};
+    predict(features: Features): string {
+      const scores: Labels = {};
       for (const feature in features) {
         const classes = weights[feature];
         const value = features[feature];
@@ -50,7 +57,11 @@ export default function (weights = {}, iterations = 0) {
      * in `features` if `label` does not equal `guess`. If `guess` is not given,
      * it defaults to the output of `predict(features)`.
      */
-    update(features = {}, label = "", guess = perceptron.predict(features)) {
+    update(
+      features: Features,
+      label: string,
+      guess: string | undefined = perceptron.predict(features),
+    ) {
       if (label !== guess) {
         for (const feature in features) {
           if (!weights[feature]) {
@@ -64,7 +75,7 @@ export default function (weights = {}, iterations = 0) {
           const value = features[feature];
           const classes = weights[feature];
           const accumulatedClasses = accumulatedWeights[feature];
-          const { [label]: weight = 0 } = classes;
+          const weight = classes[label] || 0;
           const { [label]: [total, timestamp] = [0, 0] } = accumulatedClasses;
           classes[label] = weight + value;
           accumulatedClasses[label] = [total + weight * (i - timestamp), i];
@@ -86,11 +97,11 @@ export default function (weights = {}, iterations = 0) {
      */
     weights() {
       const iterations = i || 1;
-      const averagedWeights = {};
+      const averagedWeights: Weights = {};
       for (const feature in weights) {
         const classes = weights[feature];
         const accumulatedClasses = accumulatedWeights[feature] || {};
-        const averagedClasses = {};
+        const averagedClasses: Labels = {};
         averagedWeights[feature] = averagedClasses;
         for (const label in classes) {
           const weight = classes[label];

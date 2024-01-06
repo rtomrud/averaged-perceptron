@@ -1,5 +1,8 @@
 {
-  "extends": ["eslint-config-pretty-strict"],
+  "extends": [
+    "eslint-config-pretty-strict",
+    "plugin:@typescript-eslint/recommended"
+  ],
   "overrides": [
     {
       "extends": ["plugin:jest/recommended"],
@@ -10,10 +13,13 @@
       "plugins": ["jest"]
     }
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 2021,
+    "project": ["./tsconfig.json"],
     "sourceType": "module"
   },
+  "plugins": ["@typescript-eslint"],
   "rules": {
     "guard-for-in": "off"
   },

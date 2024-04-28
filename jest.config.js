@@ -5,7 +5,4 @@ export default {
     "^(\\.{1,2}/.*\\.wasm\\.js)$": "$1",
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
-  transform: {
-    "^.+\\.(t|j)sx?$": "esbuild-jest",
-  },
 };

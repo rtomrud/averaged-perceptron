@@ -1,7 +1,6 @@
 {
   "extends": [
-    "eslint-config-pretty-strict",
-    "plugin:@typescript-eslint/recommended"
+    "eslint-config-pretty-strict"
   ],
   "overrides": [
     {
@@ -13,13 +12,10 @@
       "plugins": ["jest"]
     }
   ],
-  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2021,
-    "project": ["./tsconfig.json"],
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint"],
   "rules": {
     "guard-for-in": "off"
   },

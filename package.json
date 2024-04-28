@@ -32,9 +32,8 @@
     "posttest": "npm run lint"
   },
   "devDependencies": {
-    "eslint": "8.56.0",
-    "eslint-config-pretty-strict": "8.1.2",
-    "eslint-plugin-prettier": "5.1.2",
+    "@eslint/js": "9.1.1",
+    "eslint": "8.57.0",
     "prettier": "3.1.1"
   },
   "type": "module",

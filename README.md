@@ -1,9 +1,5 @@
 # averaged-perceptron
 
-[![build status](https://github.com/rtomrud/averaged-perceptron/workflows/ci/badge.svg)](https://github.com/rtomrud/averaged-perceptron/actions?query=branch%3Amaster+workflow%3Aci)
-[![npm version](https://badgen.net/npm/v/averaged-perceptron)](https://www.npmjs.com/package/averaged-perceptron)
-[![bundle size](https://badgen.net/bundlephobia/minzip/averaged-perceptron)](https://bundlephobia.com/result?p=averaged-perceptron)
-
 A linear classifier with the averaged [perceptron](https://en.wikipedia.org/wiki/Perceptron) algorithm
 
 ## Installing
